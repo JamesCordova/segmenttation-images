@@ -344,6 +344,47 @@ def semi_circles_outside_param():
 def execution_with_threads():
     from lv_set.MainCopy import process_and_show_images
     process_and_show_images()
+    exit(0)
+
+def custom_image_gourd_menu():
+    print('Select the image to use:')
+    print('1. circle_0_noise.jpg')
+    print('2. circle_with_noise.jpg')
+    print('3. circle_noiseness.jpg')
+    print('4. Salir')
+    menu = input('Enter a number: ')
+    if menu == '1':
+        return custom_image_gourd('circle_0_noise.jpg')
+    elif menu == '2':
+        return custom_image_gourd('circle_with_noise.jpg')
+    elif menu == '3':
+        return custom_image_gourd('circle_noiseness.jpg')
+    else:
+        return None
+
+def custom_image_cells_menu():
+    print('Select the image to use:')
+    print('Debe estar en el directorio antes o dar su ruta')
+    print('E.g. scan_knee.jpg')
+    img_path = input('Enter the name: ')
+    return custom_image_cells(img_path)
+    
+def show_menu():
+    print('Select the method to use:')
+    print('1. gourd_params')
+    print('2. two_cells_params')
+    print('2. four_shapes')
+    print('4. four_gourd_params')
+    print('5. custom_shapes_param')
+    print('6. custom_shapes_separated_param')
+    print('7. heart_param')
+    print('8. semi_circles_param')
+    print('9. semi_circles_outside_param')
+    print('10. custom_image_gourd')
+    print('11. custom_image_cells')
+    print('12. Execution with threads')
+    print('13. Exit')
+    return input('Enter a number: ')
 
 def denoise(img):
     # im1 = img.filter(ImageFilter.BLUR)
@@ -376,34 +417,22 @@ params = gourd_params()
 
 list_options = [gourd_params, two_cells_params, four_shapes, 
                 four_gourd_params, custom_shapes_param, custom_shapes_separated_param, 
-                heart_param, semi_circles_param, semi_circles_outside_param, custom_image_gourd, 
-                custom_image_cells, execution_with_threads,exit]
+                heart_param, semi_circles_param, semi_circles_outside_param, custom_image_gourd_menu, 
+                custom_image_cells_menu, execution_with_threads,exit]
 
 # A menu trough console to select the method to use and exit
 # by choicing a number and show the result
-print('Select the method to use:')
-print('1. gourd_params')
-print('2. two_cells_params')
-print('2. four_shapes')
-print('4. four_gourd_params')
-print('5. custom_shapes_param')
-print('6. custom_shapes_separated_param')
-print('7. heart_param')
-print('8. semi_circles_param')
-print('9. semi_circles_outside_param')
-print('10. custom_image_gourd')
-print('11. custom_image_cells')
-print('12. Execution with threads')
-print('13. Exit')
-menu = input('Enter a number: ')
-
+menu = show_menu()
+if int(menu) < 1 or int(menu) > len(list_options):
+    print('Invalid option')
+    menu = show_menu()
 # now execute the option
 params = list_options[int(menu) - 1]()
 
 denoise(Image.open(current_img))
 phi = find_lsf(**params)
 
-print('Show final output')
+print('Show final output (Ahora puede cerrar el plot)')
 draw_all(phi, params['img'], 100)
 
 # image = Image.open("gourd.bmp")
@@ -411,7 +440,7 @@ image = Image.open(current_img)
 mode = image.mode
 image_array = np.array(image)
 # print(image_array)
-if mode == 'L':
+if mode == 'L' or mode == 'RGB':
     print('The image is grayscale')
     # phi mask
     np.set_printoptions(threshold=np.inf)
@@ -428,25 +457,10 @@ if mode == 'L':
 
     # Save the modified image
     modified_image.save('modified_image.jpg')
-elif mode == 'RGB':
+    print('Imagen con matriz modificada guardada en modified_image.jpg')
+if mode == 'RGB':
     print('The image is NOT grayscale')
-    # phi mask
-    np.set_printoptions(threshold=np.inf)
-    np.set_printoptions(suppress=True,precision=8)
-    # phi_truncated = np.where(np.logical_and(phi != 2, np.abs(phi - np.round(phi)) > 1e-10), np.round(phi), phi)
-    # phi_truncated = np.trunc(phi * 100) / 100
-    # phi_truncated = np.ceil(phi * 100) / 100
-    phi_truncated = np.floor(phi)
-    # print(phi)
-    # print(phi_truncated)
-    # print(image_array[phi_truncated <= 0])
-    # color opuesto
-    image_array[phi_truncated <= 0] = 255 - image_array[phi_truncated <= 0]
-    
-    modified_image = Image.fromarray(image_array)
     print('The image is RGB (no alpha channel)')
-    # Save the modified image
-    modified_image.save('modified_image.jpg')
 elif mode == 'RGBA':
     print('The image is RGB with an alpha channel (opacity)')
 else:

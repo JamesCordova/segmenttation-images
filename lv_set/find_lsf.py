@@ -38,7 +38,8 @@ def find_lsf(img: np.ndarray, initial_lsf: np.ndarray, timestep=1, iter_inner=10
     # Ajustar sigma en función del nivel de ruido estimado
     print(noise_level)
     if noise_level < threshold_value:
-        sigma = 0.8  # Usar un valor predeterminado si el ruido es bajo
+        if sigma < 0.8:
+            sigma = 0.8  # Usar un valor predeterminado si el ruido es bajo
     else:
         sigma =  3
     print(sigma)
@@ -50,6 +51,7 @@ def find_lsf(img: np.ndarray, initial_lsf: np.ndarray, timestep=1, iter_inner=10
     data = im.fromarray(img_smooth)
     if data.mode != 'RGB':
         data = data.convert('RGB')
+    print('Imagen con filtro gaussiano guardada en img_with_filter_gauss.bmp')
     data.save('img_with_filter_gauss.bmp')
     [Iy, Ix] = np.gradient(img_smooth)
     f = np.square(Ix) + np.square(Iy)

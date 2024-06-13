@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from skimage import measure
 
-plt.ion()
+plt.ioff()
 fig1 = plt.figure(1)
 ax1 = None  # Initialize axes variables
 ax2 = None
@@ -50,6 +50,7 @@ def show_fig2(phi: np.ndarray, img: np.ndarray):
     plt.draw()
 
 def draw_all(phi: np.ndarray, img: np.ndarray, pause=0.3):
+    plt.ion() 
     show_fig2(phi, img)
     show_fig1(phi)
     plt.pause(pause)
