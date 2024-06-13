@@ -384,7 +384,7 @@ def show_menu():
     print('11. custom_image_cells')
     print('12. Execution with threads')
     print('13. Exit')
-    print('Ctrl+C (una o mas veces)para abortar proceso')
+    print('Ctrl + C (una o mas veces) para abortar proceso')
     return input('Enter a number: ')
 
 def denoise(img):
