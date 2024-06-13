@@ -20,8 +20,8 @@ def custom_image_cells(img):
     initial_lsf = c0 * np.ones(img.shape)
     # generate the initial
     # generate rectangles for the initial region R0
-    row_index = int(40 * initial_lsf.shape[0] / 100)
-    col_index = int(40 * initial_lsf.shape[1] / 100)
+    row_index = int(10 * initial_lsf.shape[0] / 100)
+    col_index = int(10 * initial_lsf.shape[1] / 100)
     initial_lsf[row_index:-row_index, col_index:-col_index] = -c0
 
     # parameters
@@ -384,6 +384,7 @@ def show_menu():
     print('11. custom_image_cells')
     print('12. Execution with threads')
     print('13. Exit')
+    print('Ctrl+C (una o mas veces)para abortar proceso')
     return input('Enter a number: ')
 
 def denoise(img):
@@ -429,7 +430,7 @@ if int(menu) < 1 or int(menu) > len(list_options):
 # now execute the option
 params = list_options[int(menu) - 1]()
 
-denoise(Image.open(current_img))
+# denoise(Image.open(current_img))
 phi = find_lsf(**params)
 
 print('Show final output (Ahora puede cerrar el plot)')
